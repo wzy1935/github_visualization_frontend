@@ -50,6 +50,10 @@ function fetchForGraph(resp) {
   if (resp.code == 0) {
     let labelArr = resp.data.map(item => item.release_name)
     let valueArr = resp.data.map(item => item.commits)
+    if (valueArr.length == 0) {
+      releaseCommitsStatus.value = 2
+      return
+    }
 
     let option = {
       tooltip: {

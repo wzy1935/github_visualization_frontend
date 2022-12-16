@@ -75,6 +75,10 @@ function fetchForGraph(resp) {
   if (code == 0) {
     let nameArr = data.map((value) => value.developer)
     let amountArr = data.map((value) => value.commits)
+    if (amountArr.length == 0) {
+      developerRankStatus.value = 2
+      return
+    }
     let option = {
       tooltip: {
         trigger: 'axis',

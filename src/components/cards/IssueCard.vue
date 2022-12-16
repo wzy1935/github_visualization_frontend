@@ -23,8 +23,10 @@
         <EChart :option="issueDurationOption" :status="issueDurationStatus" class=" h-96 w-full" />
         <div class=" w-64 shrink-0 flex flex-col space-y-3 p-6 text-sm">
           <div class=" font-bold text-base">Details</div>
-          <div>Average Time:<br /><span class=" text-green-500">{{ issueDurationTexts.avgStr }}</span></div>
-          <div>Standard Deviation:<br /><span class=" text-green-500">{{ issueDurationTexts.stdStr }}</span></div>
+          <div v-if="issueDurationStatus == 0">
+            <div>Average Time:<br /><span class=" text-green-500">{{ issueDurationTexts.avgStr }}</span></div>
+            <div>Standard Deviation:<br /><span class=" text-green-500">{{ issueDurationTexts.stdStr }}</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -59,7 +61,10 @@ let issueDurationTexts = ref({
 onMounted(() => {
   Promise.all([
     api.issueAmount(owner, repo),
-    api.issueDistribution(owner, repo, utils.toTimeStamp('2017-12-1'), utils.toTimeStamp('2022-12-1'), 60),
+    api.issueDistribution(owner, repo,
+      utils.toTimeStamp(issueDistributionYear.value + '-1-1'),
+      utils.toTimeStamp(issueDistributionYear.value + '-12-31'), 60
+    ),
     api.issueDuration(owner, repo)
   ]).then(resps => {
     fetchForDurationChart(resps[2])
@@ -76,8 +81,8 @@ function updateDistributionYear() {
   issueDistributionStatus.value = 1
   api.issueDistribution(
     owner, repo,
-    utils.toTimeStamp(issueDistributionYear + '-1-1'),
-    utils.toTimeStamp(issueDistributionYear + '-12-31'), 60
+    utils.toTimeStamp(issueDistributionYear.value + '-1-1'),
+    utils.toTimeStamp(issueDistributionYear.value + '-12-31'), 60
   ).then(resp => {
     fetchForDistributionChart(resp)
   })
@@ -85,7 +90,7 @@ function updateDistributionYear() {
 
 function fetchForAmountText(resp) {
   if (resp.code == 0) {
-    issueAmountStr.value = "There are " + resp.data.open + " issues open, " + resp.data.closed + " issues closed."
+    issueAmountStr.value = "There are " + resp.data.open_cnt + " issues open, " + resp.data.closed_cnt + " issues closed."
   } else {
     issueAmountStr.value = "Failed to load."
   }
@@ -109,14 +114,15 @@ function fetchForDurationChart(resp) {
         name: value.label
       }
     })
+    if (dataArr.length == 0) {
+      issueDurationStatus.value = 2
+      return
+    }
     let option = {
       tooltip: {
         trigger: 'item'
       },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      },
+
       series: [
         {
           name: 'Time Duration',

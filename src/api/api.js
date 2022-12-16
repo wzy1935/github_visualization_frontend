@@ -1,4 +1,5 @@
 import req from './request.js'
+import axios from 'axios'
 
 async function parseResp(promise) {
   try {
@@ -6,8 +7,8 @@ async function parseResp(promise) {
     return resp.data
   } catch (error) {
     return {
-      code: -2,
-      'message': 'unknown error'
+      code: -100,
+      'message': 'unknown error (network error maybe)'
     }
   }
 }
@@ -71,4 +72,19 @@ export default {
     return await parseResp(req.get(owner + '/' + repo + '/general/status'))
   },
 
+  generalCode: async function generalCode(owner, repo) {
+    return await parseResp(req.get(owner + '/' + repo + '/general/code'))
+  },
+
+  submitTask: async function submitTask(owner, repo, token) {
+    return await parseResp(req.post(owner + '/' + repo + '/submit', null, {
+      headers: {
+        'github_token': token
+      }
+    }))
+  },
+
+  authCode: async function authCode() {
+    return await parseResp(req.get("/general/oauth/code"))
+  },
 }

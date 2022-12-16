@@ -46,6 +46,10 @@ function fetchForGraph(resp) {
     let dataArr = resp.data.map(function (item) {
       return [item.hour, 6 - item.weekday, item.commits];
     })
+    if (dataArr.length == 0) {
+      commitsDistributionStatus.value = 2
+      return
+    }
     let commitMax = Math.max(...dataArr.map(item => item[2]))
 
     let option = {

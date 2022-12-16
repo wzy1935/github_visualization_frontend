@@ -5,16 +5,21 @@
       <div v-if="fetchStatus == 0">
         <div class="px-3">
           <div class=" ">Last Updated:</div>
-          <div class=" font-bold">{{lastUpdatedStr}}</div>
+          <div class=" font-bold">{{ lastUpdatedStr }}</div>
         </div>
         <hr class=" my-3" />
         <div class="px-3 mb-2">
-          <div class=" mb-2 text-white rounded-md px-2 py-1 text-sm inline-block" :class="codeMap[statusCode][1]">{{codeMap[statusCode][0]}}</div>
-          <div class=" ">{{codeMap[statusCode][2]}}</div>
+          <div class=" mb-2 text-white rounded-md px-2 py-1 text-sm inline-block" :class="codeMap[statusCode][1]">
+            {{ codeMap[statusCode][0] }}</div>
+          <div class="">{{ codeMap[statusCode][2] }}</div>
+        </div>
+        <div v-if="needCollect">
+          <hr class=" my-3" />
+          <DataCollect class=" px-3 mb-2" />
         </div>
       </div>
 
-      <div v-else-if="fetchStatus == 1">
+      <div v-else-if="fetchStatus == 100">
         Loading...
       </div>
 
@@ -26,9 +31,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../../api/api'
+import DataCollect from '../utils/DataCollect.vue'
 import utils from '../../api/utils'
 
 let route = useRoute()
@@ -37,17 +43,21 @@ let repo = route.params.repo
 
 const codeMap = {
   '0': ['normal', 'bg-green-500', 'Data is all up-to-date.'],
-  '1': ['outdated', 'bg-lime-500', 'The latest data is more than a day old.'],
+  '1': ['outdated', 'bg-lime-500', 'The latest data is more than one day old.'],
   '2': ['collecting', 'bg-pink-500', 'Data is being collected for this repository.'],
   '3': ['queuing', 'bg-purple-500', 'Data is waiting to be collected'],
   '4': ['empty', 'bg-yellow-500', 'No data has been collected.'],
-  '-1': ['invalid', 'bg-red-500', 'Invalid repository.']
+  '-1': ['invalid', 'bg-red-500', 'Invalid repository.'],
+  '100': ['loading', 'bg-gray-500', 'Loading...'],
 }
 
-let statusCode = ref(0)
-let fetchStatus = ref(1)
+let statusCode = ref(100)
+let fetchStatus = ref(100)
 let lastUpdatedStr = ref('')
-
+let needCollect = computed(() => {
+  return statusCode.value == 1
+    || statusCode.value == 4
+})
 
 onMounted(() => {
   api.generalStatus(owner, repo).then(resp => {

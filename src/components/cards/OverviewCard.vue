@@ -74,6 +74,10 @@ onMounted(() => {
 
 function fetchForText(resp) {
   if (resp.code == 0) {
+    if (resp.data == null) {
+      fetchStatus.value = -100
+      return
+    }
     let dataStr = resp.data
     let data = JSON.parse(dataStr)
     generalInfo.value.owner = data.owner.login

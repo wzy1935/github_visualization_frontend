@@ -14,6 +14,12 @@
       </svg>
     </div>
 
+    <div class=" top-0 absolute flex justify-center items-center h-full w-full bg-gray-50" v-else-if="thisStatus == NO_DATA">
+      <div>
+        NO DATA
+      </div>
+    </div>
+
     <div class=" top-0 absolute flex flex-col justify-center items-center h-full w-full" v-if="thisStatus < 0">
       <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
         class=" h-16 w-16 text-red-400" viewBox="0 0 24 24">
@@ -34,7 +40,7 @@ import * as echarts from 'echarts'
 import { watch, ref, onMounted } from 'vue'
 
 const LOADING = 1;
-const FAIL = -1;
+const NO_DATA = 2;
 const SUCCESS = 0;
 
 

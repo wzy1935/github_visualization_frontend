@@ -1,8 +1,11 @@
 import axios from 'axios'
 
+export const BASE_URL = 'http://localhost:8080/api'
+// export const BASE_URL = 'https://mock.apifox.cn/m1/1936207-0-default/api'
+// export const BASE_URL = ''
+
 let req = axios.create({
-  // baseURL: 'http://localhost:8080/api'
-  baseURL: 'https://mock.apifox.cn/m1/1936207-0-default/api'
+  baseURL: BASE_URL
 })
 
 
