@@ -1,8 +1,12 @@
 <template>
   <div v-if="repoCode == 0">
     <div class=" bg-slate-100 border-b border-slate-300 p-4">
-      <div class=" text-2xl font-bold cursor-pointer hover:underline w-fit">{{ repo }}</div>
-      <div class=" text-sm cursor-pointer hover:underline w-fit">{{ owner }}</div>
+      <div class=" text-2xl font-bold cursor-pointer hover:underline w-fit">
+        <a :href="'https://github.com/'+ owner +'/' + repo" target="_blank">{{ repo }}</a>
+      </div>
+      <div class=" text-sm cursor-pointer hover:underline w-fit">
+        <a :href="'https://github.com/'+ owner" target="_blank">{{ owner }}</a>
+      </div>
     </div>
     <div>
       <div class=" flex justify-center space-x-6 p-6">
@@ -49,8 +53,8 @@
         <div class=" text-6xl">🤔</div>
         <div class=" mt-4">{{ failedDisplayText }}</div>
         <div class=" w-full" v-if="needCollect">
-          <hr class=" my-3 w-full"/>
-          <DataCollect class=" flex flex-col items-center"/>
+          <hr class=" my-3 w-full" />
+          <DataCollect class=" flex flex-col items-center" />
         </div>
       </div>
     </div>

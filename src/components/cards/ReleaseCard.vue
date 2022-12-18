@@ -74,6 +74,9 @@ function fetchForGraph(resp) {
           data: labelArr,
           axisTick: {
             alignWithLabel: true
+          },
+          axisLabel: {
+            rotate: 45
           }
         }
       ],

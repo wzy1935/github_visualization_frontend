@@ -37,6 +37,7 @@
 
 <script setup>
 import * as echarts from 'echarts'
+import 'echarts-wordcloud'
 import { watch, ref, onMounted } from 'vue'
 
 const LOADING = 1;

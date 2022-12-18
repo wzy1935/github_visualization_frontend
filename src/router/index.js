@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router
 import HomeView from '../views/HomeView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import VisualizationView from '../views/VisualizationView.vue'
+import QueueView from '../views/QueueView.vue'
+import PopularView from '../views/PopularView.vue'
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +23,16 @@ const router = createRouter({
       path: '/visualization/:owner/:repo',
       name: 'visualization',
       component: VisualizationView
+    },
+    {
+      path: '/queue',
+      name: 'queue',
+      component: QueueView
+    },
+    {
+      path: '/popular',
+      name: 'popular',
+      component: PopularView
     },
     // {
     //   path: '/about',

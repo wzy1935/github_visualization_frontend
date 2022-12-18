@@ -18,14 +18,14 @@
     </div> -->
   </div>
 
-  <div class=" bg-white p-4 flex w-screen justify-center">
+  <!-- <div class=" bg-white p-4 flex w-screen justify-center">
     <div class=" w-full max-w-4xl">
       <div class=" text-3xl font-bold">Top Repositories</div>
       <div>
         <div>FreeCodeCamp/</div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup>

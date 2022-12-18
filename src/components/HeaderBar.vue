@@ -2,27 +2,27 @@
   <div class=" bg-gray-800 text-white p-3">
     <div class=" flex justify-between items-center">
       <div class=" flex items-center space-x-4">
-        <div class=" font-bold">
+        <button class=" font-bold" @click="router.push('/')">
           Github Visualization
-        </div>
+        </button>
         <div>
           <input v-model="inputText" type="text" placeholder="owner/repo" @keyup.enter="goto"
           :class="validInput ? 'focus:bg-white' : ' focus:bg-red-50'"
             class=" focus:outline-none bg-gray-800 focus:text-black text-gray-300 border border-gray-500 rounded-l-md p-1 w-64 text-sm">
           <button @click="goto" class=" border-gray-500 border-l-0 hover:bg-gray-700 py-1 px-2 rounded-r-md border text-sm">Goto</button>
         </div>
-        <button class=" text-sm hover:text-gray-200">
+        <button class=" text-sm hover:text-gray-200" @click="router.push('/popular')">
           Popular
         </button>
-        <button class=" text-sm hover:text-gray-200">
+        <button class=" text-sm hover:text-gray-200" @click="router.push('/queue')">
         Job queue
         </button>
-        <button class=" text-sm hover:text-gray-200">
+        <!-- <button class=" text-sm hover:text-gray-200">
           APIs
-        </button>
+        </button> -->
       </div>
       <div>
-        avatar
+        <!-- avatar -->
       </div>
     </div>
   </div>

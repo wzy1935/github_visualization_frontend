@@ -8,9 +8,11 @@
     <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
       <div class=" mb-6">The following graph shows <strong>issue status at different times</strong>.</div>
       <div class=" flex justify-center items-center">
-        <div>Year of</div>
-        <input type="number" v-model="issueDistributionYear" @blur="updateDistributionYear"
-          class=" mx-2 text-center w-20 focus:outline-none focus:bg-gray-100" />
+        <input type="number" v-model="issueDistributionYearFrom" @blur="updateDistributionYear"
+          class=" mx-2 text-center w-20 focus:outline-none bg-gray-100" />
+          -
+          <input type="number" v-model="issueDistributionYearTo" @blur="updateDistributionYear"
+          class=" mx-2 text-center w-20 focus:outline-none bg-gray-100" />
       </div>
       <div class=" w-full">
         <EChart :option="issueDistributionOption" :status="issueDistributionStatus" class=" h-96" />
@@ -22,12 +24,19 @@
       <div class=" w-full flex">
         <EChart :option="issueDurationOption" :status="issueDurationStatus" class=" h-96 w-full" />
         <div class=" w-64 shrink-0 flex flex-col space-y-3 p-6 text-sm">
-          <div class=" font-bold text-base">Details</div>
+          <div class=" font-bold text-base" v-if="issueDurationStatus == 0">Details</div>
           <div v-if="issueDurationStatus == 0">
             <div>Average Time:<br /><span class=" text-green-500">{{ issueDurationTexts.avgStr }}</span></div>
-            <div>Standard Deviation:<br /><span class=" text-green-500">{{ issueDurationTexts.stdStr }}</span></div>
+            <div>Variance:<br /><span class=" text-green-500">{{ issueDurationTexts.stdStr }}</span></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
+      <div class=" mb-6">The <strong>word cloud</strong> is automatically generated from issue texts.</div>
+      <div class=" w-full flex">
+        <EChart :option="wordCloudOption" :status="wordCloudStatus" class=" h-96 w-full" />
       </div>
     </div>
   </div>
@@ -49,7 +58,8 @@ let issueAmountStr = ref("Loading...")
 
 let issueDistributionStatus = ref(1)
 let issueDistributionOption = ref(null)
-let issueDistributionYear = ref(new Date().getFullYear())
+let issueDistributionYearFrom = ref(new Date().getFullYear())
+let issueDistributionYearTo = ref(new Date().getFullYear())
 
 let issueDurationStatus = ref(1)
 let issueDurationOption = ref(null)
@@ -58,31 +68,42 @@ let issueDurationTexts = ref({
   stdStr: ''
 })
 
+let wordCloudStatus = ref(1)
+let wordCloudOption = ref(null)
+
 onMounted(() => {
   Promise.all([
     api.issueAmount(owner, repo),
     api.issueDistribution(owner, repo,
-      utils.toTimeStamp(issueDistributionYear.value + '-1-1'),
-      utils.toTimeStamp(issueDistributionYear.value + '-12-31'), 60
+      utils.toTimeStamp(issueDistributionYearFrom.value + '-1-1'),
+      utils.toTimeStamp(issueDistributionYearTo.value + '-12-31'), 60
     ),
-    api.issueDuration(owner, repo)
+    api.issueDuration(owner, repo),
+    api.issueWordcloud(owner, repo, 200)
   ]).then(resps => {
     fetchForDurationChart(resps[2])
     fetchForDistributionChart(resps[1])
     fetchForDurationText(resps[2])
-    fetchForAmountText(resps[0])
+    fetchForAmountText(resps[0]),
+      fetchForWordCloudChart(resps[3])
   })
 })
 
 function updateDistributionYear() {
-  if (issueDistributionYear.value < 1900) {
+  if (issueDistributionYearFrom.value < 1900) {
     issueDistributionYear.value = new Date().getFullYear()
+  }
+  if (issueDistributionYearTo.value < 1900) {
+    issueDistributionYear.value = new Date().getFullYear()
+  }
+  if (issueDistributionYearFrom.value > issueDistributionYearTo.value) {
+    issueDistributionYearFrom.value = issueDistributionYearTo.value
   }
   issueDistributionStatus.value = 1
   api.issueDistribution(
     owner, repo,
-    utils.toTimeStamp(issueDistributionYear.value + '-1-1'),
-    utils.toTimeStamp(issueDistributionYear.value + '-12-31'), 60
+    utils.toTimeStamp(issueDistributionYearFrom.value + '-1-1'),
+    utils.toTimeStamp(issueDistributionYearTo.value + '-12-31'), 60
   ).then(resp => {
     fetchForDistributionChart(resp)
   })
@@ -98,11 +119,11 @@ function fetchForAmountText(resp) {
 
 function fetchForDurationText(resp) {
   if (resp.code == 0) {
-    let avgStr = humanizeDuration(resp.data.avg * 1000)
+    let avgStr = humanizeDuration(resp.data.avg)
     let avgArr = avgStr.split(',')
     avgStr = avgArr[0] + (avgArr.length > 1 ? avgArr[1] : '')
     issueDurationTexts.value.avgStr = avgStr
-    issueDurationTexts.value.stdStr = resp.data.std
+    issueDurationTexts.value.stdStr = resp.data.std.toFixed(2)
   }
 }
 
@@ -194,6 +215,44 @@ function fetchForDistributionChart(resp) {
     issueDistributionOption.value = option
   }
   issueDistributionStatus.value = resp.code
+}
+
+function fetchForWordCloudChart(resp) {
+  if (resp.code == 0) {
+    let dataArr = resp.data.map(item => {
+      return {
+        name: item.label.replaceAll(/\s/g, ' '),
+        value: item.weight
+      }
+    })
+    let option = {
+      tooltip: {
+        trigger: 'item'
+      },
+      series: [{
+        type: 'wordCloud',
+        shape: 'square',
+        left: 0,
+        right: 0,
+        top: 0,
+        right: 0,
+        width: '100%',
+        height: '100%',
+        gridSize: 2,
+        sizeRange: [10, 64],
+        rotationRange: [-90, 90],
+        textStyle: {
+          fontWeight: 'bold',
+          color: function () {
+            return ['#4ade80', '#fb923c', '#22d3ee', '#facc15', '#8b5cf6', '#ec4899', '#22d3ee', '#fb7185'][Math.random() * 8 | 0]
+          }
+        },
+        data: dataArr
+      }],
+    }
+    wordCloudOption.value = option
+  }
+  wordCloudStatus.value = resp.code
 }
 
 </script>
