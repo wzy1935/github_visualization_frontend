@@ -5,6 +5,6 @@
 
 @layer components {
   .link {
-    @apply cursor-pointer text-blue-700 hover:underline
+    @apply cursor-pointer hover:underline
   }
 }

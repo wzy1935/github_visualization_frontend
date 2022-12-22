@@ -1,6 +1,8 @@
 <template>
-  <HeaderBar />
-  <router-view></router-view>
+  <div>
+    <HeaderBar />
+    <router-view></router-view>
+  </div>
 </template>
 
 

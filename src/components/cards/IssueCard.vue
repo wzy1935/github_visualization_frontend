@@ -91,10 +91,10 @@ onMounted(() => {
 
 function updateDistributionYear() {
   if (issueDistributionYearFrom.value < 1900) {
-    issueDistributionYear.value = new Date().getFullYear()
+    issueDistributionYearFrom.value = new Date().getFullYear()
   }
   if (issueDistributionYearTo.value < 1900) {
-    issueDistributionYear.value = new Date().getFullYear()
+    issueDistributionYearTo.value = new Date().getFullYear()
   }
   if (issueDistributionYearFrom.value > issueDistributionYearTo.value) {
     issueDistributionYearFrom.value = issueDistributionYearTo.value
@@ -123,7 +123,8 @@ function fetchForDurationText(resp) {
     let avgArr = avgStr.split(',')
     avgStr = avgArr[0] + (avgArr.length > 1 ? avgArr[1] : '')
     issueDurationTexts.value.avgStr = avgStr
-    issueDurationTexts.value.stdStr = resp.data.std.toFixed(2)
+    let std = resp.data.std
+    issueDurationTexts.value.stdStr = isNaN(std) ? 'None' : std.toFixed(2)
   }
 }
 
@@ -221,10 +222,14 @@ function fetchForWordCloudChart(resp) {
   if (resp.code == 0) {
     let dataArr = resp.data.map(item => {
       return {
-        name: item.label.replaceAll(/\s/g, ' '),
+        name: item.label.replace(/\s/g, ' '),
         value: item.weight
       }
     })
+    if (dataArr.length == 0) {
+      wordCloudStatus.value = 2
+      return
+    }
     let option = {
       tooltip: {
         trigger: 'item'

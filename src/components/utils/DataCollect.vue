@@ -1,11 +1,11 @@
 <template>
   <div class=" flex flex-col space-y-2">
     <div>You can help us collect data.</div>
-    <div v-if="authed == 0">
+    <div v-if="userInfo.status == 0">
       <button @click="submitClick" class=" p-2 py-1 rounded-md text-sm text-white"
         :class="btnLoading ? 'bg-gray-500 cursor-default' : 'bg-lime-500 hover:bg-lime-400'">Collect</button>
     </div>
-    <div v-if="authed == -1">
+    <div v-if="userInfo.status < 0">
       <button @click="authorizeClick"
         class=" bg-gray-800 p-2 rounded-md hover:bg-gray-700 text-white flex text-sm items-center">
         <svg class=" fill-white h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -29,6 +29,9 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../../api/api';
 import utils from '../../api/utils';
+import { useUserStore } from '../../stores/user'
+
+let userInfo = useUserStore()
 
 let route = useRoute()
 let owner = route.params.owner
@@ -47,14 +50,11 @@ function setDisplay(text, warning) {
 }
 
 let btnLoading = ref(false)
-let authed = ref(0) // yes: 0 no: -1: loading: 100
-let token = utils.getToken()
-authed.value = token == null ? -1 : 0
 
 function submitClick() {
   if (btnLoading.value) return
   btnLoading.value = true
-  api.submitTask(owner, repo, token).then(resp => {
+  api.submitTask(owner, repo, utils.getToken()).then(resp => {
     if (resp.code == 0) {
       let result = resp.data.result
       if (result >= 0) {
