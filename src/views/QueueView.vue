@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="fetchStatus >= 0" class=" flex flex-col items-center space-y-4 my-6">
+    <div v-if="fetchStatus >= 0" class=" flex flex-col items-center space-y-4 my-6 mx-2">
       <div class=" p-4 max-w-3xl flex justify-between items-center w-full">
         <div class=" text-xl font-bold">Job Queue</div>
         <button @click="fetch" :class="fetchStatus == 100 ? ' bg-gray-500 cursor-default' : 'bg-green-500'" class=" text-white rounded-md px-2 py-1 text-sm inline-block">refresh</button>
       </div>
       <div v-for="item in fetchList"
-        class=" p-4 bg-gray-50 shadow-md max-w-3xl flex justify-between items-center w-full">
+        class=" p-4 bg-gray-50 shadow-md max-w-3xl flex justify-between max-sm:flex-col max-sm:space-y-2 sm:items-center w-full">
         <div class=" w-full">{{ item.repoStr }}</div>
         <div class=" w-full">TASK {{ item.taskIndex }} TURN {{ item.taskPage }}</div>
         <div class=" w-28 shrink-0 text-center text-sm p-1 text-white rounded-md"

@@ -10,9 +10,9 @@
     </div>
   </div>
 
-  <div class=" flex flex-col w-full items-center py-48">
-    <div class="mb-12 w-1/2">
-      <div class=" font-bold text-5xl text-center">Visualize your github repository with one click.</div>
+  <div class=" flex flex-col w-full items-center py-48 max-md:py-24">
+    <div class="mb-12 md:w-1/2 max-md:px-6">
+      <div class=" font-bold text-5xl max-md:text-3xl text-center">Visualize your Github repository with one click.</div>
     </div>
     <button @click="utils.jumpAuth" :class="userInfo.status >= 0 ? 'invisible' : ''"
       class=" bg-gray-800 p-2 rounded-md hover:bg-gray-700 text-white flex text-sm items-center">
@@ -28,7 +28,7 @@
   <div class=" bg-white p-6 py-24 flex w-full justify-center">
     <div class=" w-full max-w-4xl">
       <div class=" text-2xl font-bold mb-6">How to visualize my repository?</div>
-      <div class=" flex justify-center items-center space-x-6 py-16">
+      <div class=" flex max-md:flex-col justify-center items-center md:space-x-6 max-md:space-y-6 py-16">
 
         <div class=" flex flex-col items-center space-y-4">
           <svg class="h-16 w-16 fill-gray-600" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +86,7 @@
   <div class=" bg-gray-800 text-white p-6 py-24 flex w-full justify-center">
     <div class=" w-full max-w-4xl">
       <div class=" text-2xl font-bold mb-6">How it works</div>
-      <div class=" flex justify-between space-x-6">
+      <div class=" flex max-md:flex-col justify-between md:space-x-6 max-md:space-y-6 max-md:items-center">
         <div class=" shrink-0">
           <img src="../assets/how.png" alt="crawler" class="h-48">
         </div>
@@ -102,7 +102,7 @@
   <div class=" bg-white p-6 py-24 flex w-full justify-center">
     <div class=" w-full max-w-4xl">
       <div class=" text-2xl font-bold mb-6">REST Service</div>
-      <div class=" flex justify-between space-x-6">
+      <div class=" flex max-md:flex-col justify-between md:space-x-6 max-md:space-y-6 max-md:items-center">
         <div class="">
           <p class=" mb-4">All the data are available through REST API.</p>
           <p>Try the following text in your Github <span class="bg-gray-100 rounded-md p-1 font-mono">README.md</span> to generate dynamic word cloud!</p>
@@ -126,7 +126,7 @@
     <div class=" w-full max-w-4xl flex justify-center space-x-4">
       <div>SUSTech CS209A Course Project. Authored by @wzy1935 and @sustechwifi.</div>
       <div class=" border border-white bg-white"></div>
-      <div><a href="https://github.com/wzy1935/github_visualization_backend" target="_blank" class="link">Github page</a></div>
+      <div><a href="https://github.com/wzy1935/github_visualization_frontend" target="_blank" class="link">Github page</a></div>
     </div>
   </div>
 
@@ -159,6 +159,7 @@ function updateBlocks(p) {
 }
 
 function setBlockLocation(block, x1, y1, x2, y2) {
+  if (block == null || block.value == null) return
   x1 = x1.toFixed(2)
   y1 = y1.toFixed(2)
   x2 = x2.toFixed(2)

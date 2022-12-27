@@ -9,14 +9,14 @@
       </div>
     </div>
     <div>
-      <div class=" flex justify-center space-x-6 p-6">
-        <div class=" w-72 flex flex-col space-y-6">
+      <div class=" flex max-md:flex-col justify-center md:space-x-6 max-md:space-y-6 p-6 max-md:px-2">
+        <div class=" md:w-72 flex flex-col space-y-6">
           <OverviewCard />
           <StatusCard />
         </div>
 
-        <div class=" w-full max-w-4xl flex flex-col space-y-6">
-          <DeveloperCard />
+        <div class=" w-full max-w-4xl flex flex-col space-y-6 overflow-hidden">
+          <DeveloperCard/>
           <IssueCard />
           <CommitCard />
           <ReleaseCard />

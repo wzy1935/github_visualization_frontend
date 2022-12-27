@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div v-if="fetchStatus >= 0" class=" flex flex-col items-center space-y-4 my-6">
+    <div v-if="fetchStatus >= 0" class=" flex flex-col items-center space-y-4 my-6 mx-2">
       <div class=" p-4 max-w-3xl flex flex-col justify-between w-full">
         <div class=" text-xl font-bold">Popular Repository</div>
-        <div class=" ">Top 10 github repositories:</div>
+        <div class=" ">Top 10 Github repositories:</div>
       </div>
-      <div v-for="repo in repos" class="p-4 bg-gray-50 shadow-md max-w-3xl flex justify-between items-center w-full">
-        <div @click="router.push('/visualization/' + repo.owner + '/' + repo.repo)" class=" cursor-pointer">{{repo.owner}}/{{repo.repo}}</div>
-        <div class="text-white rounded-md px-2 py-1 text-sm" :class="codeMap[repo.code][1]">
+      <div v-for="repo in repos" class="p-4 bg-gray-50 shadow-md max-w-3xl flex max-sm:flex-col justify-between sm:items-center w-full">
+        <div @click="router.push('/visualization/' + repo.owner + '/' + repo.repo)" class=" cursor-pointer">{{repo.owner}} / {{repo.repo}}</div>
+        <div class="text-white rounded-md px-2 py-1 w-fit text-sm max-sm:mt-2" :class="codeMap[repo.code][1]">
           {{codeMap[repo.code][0]}}
         </div>
       </div>

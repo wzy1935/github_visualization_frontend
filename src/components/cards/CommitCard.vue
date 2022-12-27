@@ -3,8 +3,8 @@
     <div class=" bg-slate-100 rounded-t-md border p-3 border-slate-300">Commits</div>
     <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
       <div class=" mb-6">The following graph shows <strong>the time distribution</strong> of this repository.</div>
-      <div class=" w-full">
-        <EChart :option="commitsDistributionOption" :status="commitsDistributionStatus" class=" h-96" />
+      <div class="overflow-x-auto w-full">
+        <EChart :option="commitsDistributionOption" :status="commitsDistributionStatus" class=" h-96 min-w-[48rem]" />
       </div>
     </div>
   </div>

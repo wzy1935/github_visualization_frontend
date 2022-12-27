@@ -3,8 +3,8 @@
     <div class=" bg-slate-100 rounded-t-md border p-3 border-slate-300">Developers</div>
     <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
       <div>{{ introStr }}</div>
-      <div class=" flex space-x-3 py-2">
-        <div v-for="url in developerImgUrls">
+      <div class=" flex py-2 flex-wrap">
+        <div v-for="url in developerImgUrls" class=" p-1">
           <a :href="url[1]" target="_blank">
             <img :src="url[0]" class=" h-16 w-16" />
           </a>
@@ -15,8 +15,8 @@
     <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
       <div class=" mb-6">The following graph shows <strong>the ranking of each developer's contribution</strong> ordered
         by commits.</div>
-      <div class=" w-full">
-        <EChart :option="developerRankOption" :status="developerRankStatus" class=" h-96" />
+      <div class=" w-full overflow-x-auto ">
+        <EChart :option="developerRankOption" :status="developerRankStatus" class=" h-96 min-w-[36rem]" />
       </div>
     </div>
   </div>

@@ -10,20 +10,20 @@
       <div class=" flex justify-center items-center">
         <input type="number" v-model="issueDistributionYearFrom" @blur="updateDistributionYear"
           class=" mx-2 text-center w-20 focus:outline-none bg-gray-100" />
-          -
-          <input type="number" v-model="issueDistributionYearTo" @blur="updateDistributionYear"
+        -
+        <input type="number" v-model="issueDistributionYearTo" @blur="updateDistributionYear"
           class=" mx-2 text-center w-20 focus:outline-none bg-gray-100" />
       </div>
-      <div class=" w-full">
-        <EChart :option="issueDistributionOption" :status="issueDistributionStatus" class=" h-96" />
+      <div class=" w-full overflow-x-auto ">
+        <EChart :option="issueDistributionOption" :status="issueDistributionStatus" class=" h-96 min-w-[36rem]" />
       </div>
     </div>
 
     <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
       <div class=" mb-6">The following graph shows <strong>the typical issue resolving time</strong>.</div>
-      <div class=" w-full flex">
-        <EChart :option="issueDurationOption" :status="issueDurationStatus" class=" h-96 w-full" />
-        <div class=" w-64 shrink-0 flex flex-col space-y-3 p-6 text-sm">
+      <div class=" w-full flex max-lg:flex-col">
+        <EChart :option="issueDurationOption" :status="issueDurationStatus" class=" h-96 max-md:h-48 w-full" />
+        <div class=" w-48 shrink-0 flex flex-col space-y-3 p-6 text-sm">
           <div class=" font-bold text-base" v-if="issueDurationStatus == 0">Details</div>
           <div v-if="issueDurationStatus == 0">
             <div>Average Time:<br /><span class=" text-green-500">{{ issueDurationTexts.avgStr }}</span></div>
@@ -35,8 +35,8 @@
 
     <div class=" last:rounded-b-md border border-t-0 p-3 border-slate-300">
       <div class=" mb-6">The <strong>word cloud</strong> is automatically generated from issue texts.</div>
-      <div class=" w-full flex">
-        <EChart :option="wordCloudOption" :status="wordCloudStatus" class=" h-96 w-full" />
+      <div class=" w-full ">
+        <EChart :option="wordCloudOption" :status="wordCloudStatus" class=" h-96" />
       </div>
     </div>
   </div>
