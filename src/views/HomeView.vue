@@ -108,7 +108,7 @@
           <p>Try the following text in your Github <span class="bg-gray-100 rounded-md p-1 font-mono">README.md</span> to generate dynamic word cloud!</p>
 
           <p class=" bg-gray-100 rounded-md p-3 font-mono my-3 break-all">![Word cloud generated from Github
-            Visualization](https://githubvisualizationdeploy-production.up.railway.app/api/repo/<span
+            Visualization](https://githubvisualization.up.railway.app/api/repo/<span
               class=" text-green-500">{owner}</span>/<span
               class=" text-green-500">{repo}</span>/issues/wordcloud_pic/<span
               class=" text-green-500">{limit}</span>/<span
